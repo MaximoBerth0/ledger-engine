@@ -1,6 +1,14 @@
 # Ledger Engine
 
-Ledger Engine is a double-entry accounting backend designed as the financial core of a SaaS platform. Every monetary movement is recorded as a pair of immutable entries — a debit and a credit — ensuring the system is always balanced, fully auditable, and impossible to corrupt through partial writes. Money never appears or disappears, it only moves between accounts.
+Ledger Engine is a double-entry accounting backend designed as the financial core of a SaaS platform. Every monetary movement is recorded as a pair of immutable entries — a debit and a credit — ensuring the system is always balanced, fully auditable, and impossible to corrupt through partial writes. Money never appears or disappears, it only moves between accounts. 
+
+---
+
+- The system design is based primarily on the Formance documentation: 
+https://docs.formance.com
+
+---
+
 
 ## What problem it solves
 
@@ -63,7 +71,7 @@ ledger-engine/
 │   │   ├── transaction.go
 │   │   └── repositories/   # interfaces 
 │   │
-│   ├── handler/
+│   ├── handler/           # http layer
 │   │   ├── middleware/
 │   │   │   ├── idempotency.go
 │   │   │   └── logger.go
@@ -84,7 +92,8 @@ ledger-engine/
 │
 ├── pkg/              
 │   ├── apperrors/
-│   └── logger/
+│   ├── logger.go
+│   └── ulid.go
 │
 ├── go.mod
 └── go.sum
