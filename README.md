@@ -120,4 +120,17 @@ data, it asks the store through the interface.
 The HTTP layer. Parses the request, calls the service, writes the response. Each file
 groups the handlers for one domain area. No business logic lives here.
 
+---
 
+## draft (ignore)
+
+## Domain design
+The domain layer is the core of the system. It defines all structs, value types, repository interfaces, and domain errors. No business logic lives here — only the shape of the data and the contracts other layers must fulfill. The only allowed imports are stdlib packages.
+### Account 
+Represents a named container for assets. Carries a type (asset, liability, equity, revenue, expense), a currency, and a status (active, closed). Balances are never stored on the account — they are derived at query time by summing all entries that reference it.
+### Transaction 
+The atomic unit of money movement. A transaction is a header record that groups entries and commits them all at once or not at all. It carries a status (pending, posted, reverted), an optional RevertOf pointer for reversal tracing, and an idempotency key used by the middleware layer to detect duplicate requests. The transaction itself holds no money.
+### Entry
+A single line in the ledger. Records that one specific account was debited or credited by a specific amount within a transaction. Always produced in pairs — one debit, one credit — bound to the same TransactionID. The sum of all entries within a transaction must equal exactly zero, enforcing the double-entry invariant.
+### Money:
+A value object pairing an amount (stored as int64 in minor units to avoid float precision errors) with a currency. Used by Entry as the unit of measurement. Currency is a named string type with explicit constants, so invalid currencies are caught at compile time.
